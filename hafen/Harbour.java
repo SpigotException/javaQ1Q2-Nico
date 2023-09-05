@@ -2,7 +2,6 @@ package hafen;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Stack;
 
 import gui.GUI;
 import linear.Queue;
@@ -275,9 +274,9 @@ public class Harbour {
 
 	public void optimalVerladen() {
 		//Stack nach gewicht sortieren
-		//höchstes gewicht oben
+		//hï¿½chstes gewicht oben
 		this.sortContStack();
-		//für obersten container ein schiff suchen, sonst auf helpstack legen
+		//fï¿½r obersten container ein schiff suchen, sonst auf helpstack legen
 		while(!containers.isEmpty()) {
 			Container currC = containers.top();
 			for(int i=0;i<shipsAtAnchor.length;i++) {
