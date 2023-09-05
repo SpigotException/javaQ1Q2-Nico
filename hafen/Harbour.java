@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import gui.GUI;
-import linear.Queue;
+//import linear.QueueWithViewer;
+import linear.QueueWithViewer;
 import linear.StackWithViewer;
 
 
@@ -15,8 +16,8 @@ public class Harbour {
 	public StackWithViewer<Container> containers;
 	public StackWithViewer<Container> helpStack;
 	private ArrayList<Container> arrList;
-	private Queue<Ship> waitingLine;
-	public Queue<Ship> helpQueue = new Queue<>();
+	public QueueWithViewer<Ship> waitingLine;
+	public QueueWithViewer<Ship> helpQueueWithViewer = new QueueWithViewer<>();
 	String[] destinationNames = {"Rotterdam", "Lisbon", "Piräus", "Shanghai", "Los Angeles", "Guangzhou", "Antwerpen", "Le Havre", "Singapur", "Koeln"};
 	//Immer am Start von methode benutzen:
 	//StackWithViewer<Container> stack = CopyStackWithViewer(containers);
@@ -33,23 +34,31 @@ public class Harbour {
 		testship.load(new Container(22.3, 0.2));
 		containers = new StackWithViewer<Container>();
 		helpStack = new StackWithViewer<>();
-		waitingLine = new Queue<>();
+		waitingLine = new QueueWithViewer<>();
 		createCargoStackWithViewer(25);
 		createWaitingLine();
 	}
 	
-	//Queue-Methoden
+	//QueueWithViewer-Methoden
+
+
+	public void createWaitingLine() {
+		for(int i=0;i<5;i++) {
+			Ship s1 = new Ship("Titanic" + i, i*20 +30, destinationNames[i]);
+			waitingLine.enqueue(s1);
+		}
+	}
 	
 	public double approxWaitingTime() {
 		int ships = 0;
 		while(!waitingLine.isEmpty()) {
 			ships++;
-			helpQueue.enqueue(waitingLine.front());
+			helpQueueWithViewer.enqueue(waitingLine.front());
 			waitingLine.dequeue();
 		}
-		while(!helpQueue.isEmpty()) {
-			waitingLine.enqueue(helpQueue.front());
-			helpQueue.dequeue();
+		while(!helpQueueWithViewer.isEmpty()) {
+			waitingLine.enqueue(helpQueueWithViewer.front());
+			helpQueueWithViewer.dequeue();
 		}
 		return (ships * 2.5);
 	}
@@ -68,12 +77,12 @@ public class Harbour {
 			if(waitingLine.front().getDestination().equals(containers.top().getDestination())) {
 				return waitingLine.front();
 			}
-			helpQueue.enqueue(waitingLine.front());
+			helpQueueWithViewer.enqueue(waitingLine.front());
 			waitingLine.dequeue();
 		}
-		while(!helpQueue.isEmpty()) {
-			waitingLine.enqueue(helpQueue.front());
-			helpQueue.dequeue();
+		while(!helpQueueWithViewer.isEmpty()) {
+			waitingLine.enqueue(helpQueueWithViewer.front());
+			helpQueueWithViewer.dequeue();
 		}
 		return null;
 	}
@@ -82,15 +91,47 @@ public class Harbour {
 		
 		while(!waitingLine.isEmpty()) {
 			if(!waitingLine.front().getName().equals(name)) {
-			helpQueue.enqueue(waitingLine.front());
+			helpQueueWithViewer.enqueue(waitingLine.front());
 			}
 			waitingLine.dequeue();
 		}
-		while(!helpQueue.isEmpty()) {
-			waitingLine.enqueue(helpQueue.front());
-			helpQueue.dequeue();
+		while(!helpQueueWithViewer.isEmpty()) {
+			waitingLine.enqueue(helpQueueWithViewer.front());
+			helpQueueWithViewer.dequeue();
 		}
 	}
+
+	public void allEnterHarbour(){
+		while(!waitingLine.isEmpty() && giveFirstFreeAnchorage() > -1){
+			shipsAtAnchor[giveFirstFreeAnchorage()] = waitingLine.front();
+			waitingLine.dequeue();
+		}
+	}
+
+	public boolean toFront(Ship beFirstShip){
+		QueueWithViewer<Ship> tmpQueueWithViewer = new QueueWithViewer<>();
+		boolean ergebnis = false;
+		while(!waitingLine.isEmpty()){
+			if(beFirstShip.equals(waitingLine.front())){
+				helpQueueWithViewer.enqueue(waitingLine.front());
+				waitingLine.dequeue();
+				ergebnis = true;
+			}else {
+				tmpQueueWithViewer.enqueue(waitingLine.front());
+				waitingLine.dequeue();
+			}
+		}
+		while(!tmpQueueWithViewer.isEmpty()){
+				helpQueueWithViewer.enqueue(tmpQueueWithViewer.front());
+				tmpQueueWithViewer.dequeue();
+		}
+		while(!helpQueueWithViewer.isEmpty()){
+			waitingLine.enqueue(helpQueueWithViewer.front());
+			helpQueueWithViewer.dequeue();
+		}
+		return ergebnis;
+	}
+
 	//StackWithViewer-Methoden
 
  	public void createCargoStackWithViewer(int anzahl) {
@@ -131,13 +172,6 @@ public class Harbour {
 		shipsAtAnchor[0] = s1;
 		shipsAtAnchor[1] = s2;
 		shipsAtAnchor[2] = s3;
-	}
-	
-	public void createWaitingLine() {
-		for(int i=0;i<5;i++) {
-			Ship s1 = new Ship("Titanic" + i, i*20 +30, destinationNames[i]); 
-			waitingLine.enqueue(s1);
-		}
 	}
 
 	public ArrayList<Container> makeStackWithViewerToArray(StackWithViewer<Container> stack) {
@@ -415,7 +449,10 @@ public class Harbour {
 		//theHarbour.findAndRemoveHeaviest(theHarbour.containers);
 		//System.out.println(theHarbour.containers.top());
 		//System.out.println(theHarbour.countContainers("Shanghai"));
-
+		Ship s1 = new Ship("MSSeaworld", 300, "Shanghai");
+		theHarbour.waitingLine.enqueue(s1);
+		System.out.println(theHarbour.toFront(s1));
+		System.out.println(theHarbour.waitingLine.front());
 		new GUI(theHarbour);
 
 	}

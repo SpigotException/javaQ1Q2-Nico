@@ -50,14 +50,13 @@ public class Ship {
 	public void setDestination(String destination) {
 		this.destination = destination;
 	}
-	
-	
+
 	public void hireCrewMembers(int number) {
 		if(number > 0) {
 			numberOfCrewMembers += number;
 		}
 	}
-	
+
 	public void fireOneCrewMember() {
 		if(numberOfCrewMembers >0) {
 			numberOfCrewMembers--;
