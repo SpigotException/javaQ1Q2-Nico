@@ -316,7 +316,6 @@ public class Harbour {
                 if (ship != null) {
 
                     if (currC.getDestination().equals(ship.getDestination()) && ship.checkIfFits(currC)) {
-                        //TODO
                         ship.load(currC);
                         containers.pop();
                     }
