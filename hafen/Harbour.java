@@ -78,6 +78,20 @@ public class Harbour {
 		}
 		return null;
 	}
+	
+	public void removeWaitingShip(String name) {
+		
+		while(!waitingLine.isEmpty()) {
+			if(!waitingLine.front().getName().equals(name)) {
+			helpQueue.enqueue(waitingLine.front());
+			}
+			waitingLine.dequeue();
+		}
+		while(!helpQueue.isEmpty()) {
+			waitingLine.enqueue(helpQueue.front());
+			helpQueue.dequeue();
+		}
+	}
 	//StackWithViewer-Methoden
 
  	public void createCargoStackWithViewer(int anzahl) {
