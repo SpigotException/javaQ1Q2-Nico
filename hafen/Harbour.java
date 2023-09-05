@@ -10,12 +10,11 @@ import linear.StackWithViewer;
 
 
 public class Harbour {
-	private String country;
-	private String city;
-	private Ship[] shipsAtAnchor;
+	private final String country;
+	private final String city;
+	private final Ship[] shipsAtAnchor;
 	public StackWithViewer<Container> containers;
 	public StackWithViewer<Container> helpStack;
-	private ArrayList<Container> arrList;
 	public QueueWithViewer<Ship> waitingLine;
 	public QueueWithViewer<Ship> helpQueueWithViewer = new QueueWithViewer<>();
 	String[] destinationNames = {"Rotterdam", "Lisbon", "Piräus", "Shanghai", "Los Angeles", "Guangzhou", "Antwerpen", "Le Havre", "Singapur", "Koeln"};
@@ -32,7 +31,7 @@ public class Harbour {
 		this.shipsAtAnchor = new Ship[size];
 		testship.load(new Container(15.5, 13.3));
 		testship.load(new Container(22.3, 0.2));
-		containers = new StackWithViewer<Container>();
+		containers = new StackWithViewer<>();
 		helpStack = new StackWithViewer<>();
 		waitingLine = new QueueWithViewer<>();
 		createCargoStackWithViewer(25);
@@ -175,7 +174,7 @@ public class Harbour {
 	}
 
 	public ArrayList<Container> makeStackWithViewerToArray(StackWithViewer<Container> stack) {
-		ArrayList<Container> arr = new ArrayList<Container>();
+		ArrayList<Container> arr = new ArrayList<>();
 		while(!stack.isEmpty()) {
 			arr.add(stack.top());
 			stack.pop();
@@ -184,7 +183,7 @@ public class Harbour {
 	}
 
 	public StackWithViewer<Container> makeArraytoStackWithViewer(ArrayList<Container> cList){
-		StackWithViewer<Container> stack = new StackWithViewer<Container>();
+		StackWithViewer<Container> stack = new StackWithViewer<>();
 		for(int i = cList.size()-1;i>=0;i--) {
 			stack.push(cList.get(i));
 		}
@@ -192,7 +191,7 @@ public class Harbour {
 	}
 
 	public StackWithViewer<Container> CopyStackWithViewer(StackWithViewer<Container> inputStackWithViewer){
-		arrList = makeStackWithViewerToArray(inputStackWithViewer);
+		ArrayList<Container> arrList = makeStackWithViewerToArray(inputStackWithViewer);
 		StackWithViewer<Container> stack = makeArraytoStackWithViewer(arrList);
 		inputStackWithViewer = makeArraytoStackWithViewer(arrList);
 		return stack;
@@ -203,7 +202,7 @@ public class Harbour {
 		int result = 0;
 
 		while(!containers.isEmpty()) {
-			if(containers.top().getDestination() == pDestination) {
+			if(containers.top().getDestination().equals(pDestination)) {
 				result++;
 			}
 			helpStack.push(containers.top());
@@ -235,12 +234,12 @@ public class Harbour {
 
 	public boolean loadCont(Container pCont) {
 		String dest = pCont.getDestination();
-		for(int i=0;i<shipsAtAnchor.length;i++) {
-			if(shipsAtAnchor[i].getDestination().equals(dest)) {
-				shipsAtAnchor[i].load(pCont);
-				return true;
-			}
-		}
+        for (Ship ship : shipsAtAnchor) {
+            if (ship.getDestination().equals(dest)) {
+                ship.load(pCont);
+                return true;
+            }
+        }
 		return false;
 	}
 
@@ -289,13 +288,13 @@ public class Harbour {
 			helpList.add(stack.top());
 			stack.pop();
 		}
-		for(int i=0;i<helpList.size();i++) {
-			stack.push(helpList.get(i));
-		}
+        for (Container container : helpList) {
+            stack.push(container);
+        }
 	}
 
 	public void sortContStack() {
-		StackWithViewer<Container> cont = new StackWithViewer<>();
+		StackWithViewer<Container> cont;
 		cont = CopyStackWithViewer(containers);
 		while(!containers.isEmpty()) {
 			containers.pop();
@@ -313,18 +312,17 @@ public class Harbour {
 		//f�r obersten container ein schiff suchen, sonst auf helpstack legen
 		while(!containers.isEmpty()) {
 			Container currC = containers.top();
-			for(int i=0;i<shipsAtAnchor.length;i++) {
-				if(shipsAtAnchor[i] != null) {
-					Ship currShip = shipsAtAnchor[i];
+            for (Ship ship : shipsAtAnchor) {
+                if (ship != null) {
 
-					if(currC.getDestination().equals(currShip.getDestination()) && currShip.checkIfFits(currC)){
-						//TODO
-						currShip.load(currC);
-						containers.pop();
-					}
+                    if (currC.getDestination().equals(ship.getDestination()) && ship.checkIfFits(currC)) {
+                        //TODO
+                        ship.load(currC);
+                        containers.pop();
+                    }
 
-				}
-			}
+                }
+            }
 			if(!containers.isEmpty()) {
 				if(currC.equals(containers.top())) {
 					helpStack.push(containers.top());
