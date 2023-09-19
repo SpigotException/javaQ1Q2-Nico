@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import gui.GUI;
-//import linear.QueueWithViewer;
 import linear.QueueWithViewer;
 import linear.StackWithViewer;
 
+import linear.List;
 
 public class Harbour {
 	private final String country;
@@ -17,6 +17,7 @@ public class Harbour {
 	public StackWithViewer<Container> helpStack;
 	public QueueWithViewer<Ship> waitingLine;
 	public QueueWithViewer<Ship> helpQueueWithViewer = new QueueWithViewer<>();
+	private List<Integer> list = new List<>();
 	String[] destinationNames = {"Rotterdam", "Lisbon", "Piräus", "Shanghai", "Los Angeles", "Guangzhou", "Antwerpen", "Le Havre", "Singapur", "Koeln"};
 	//Immer am Start von methode benutzen:
 	//StackWithViewer<Container> stack = CopyStackWithViewer(containers);
@@ -90,7 +91,7 @@ public class Harbour {
 		
 		while(!waitingLine.isEmpty()) {
 			if(!waitingLine.front().getName().equals(name)) {
-			helpQueueWithViewer.enqueue(waitingLine.front());
+				helpQueueWithViewer.enqueue(waitingLine.front());
 			}
 			waitingLine.dequeue();
 		}
