@@ -1,4 +1,8 @@
 package bacheloristin;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.Collections;
 
 import gui.GUI;
 import linear.List;
@@ -77,14 +81,60 @@ public class BacheloristinStaffel {
 	}
 
 	// TODO: Teil 2: Aufgabe e) knutschtBacheloristin
-	
+	public void knutschBacheloristin(Kandidat pKandidat){
+        for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+            Kandidat curr = jungsListe.getContent();
+            if(curr.getName().equals(pKandidat.getName())){
+                curr.erhoeheQuotenPunkte(50);
+            }
+        }
+    }
 
 	// TODO: Teil 2: Aufgabe f) gibQuotenLetzten
-	
+    public Kandidat gibQuotenLetzten(){
+        jungsListe.toFirst();
+        Kandidat min = jungsListe.getContent();
+        for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+            Kandidat curr = jungsListe.getContent();
+            if(curr.getQuotenPunkte()<min.getQuotenPunkte()){
+                min = curr;
+            }
+        }
+        return min;
+    }
 
 	// TODO: Teil 2: Aufgabe g) gibRentnerListe
-	
 
+	public int getDate(){
+		long millis=System.currentTimeMillis();
+		java.sql.Date date = new java.sql.Date(millis);
+		String strDate = date.toString();
+		String[] parts = strDate.split("-");
+		String result = String.join("", parts);
+		return Integer.parseInt(result);
+	}
+
+	public int getDateminus30(){
+		long millis=System.currentTimeMillis();
+		java.sql.Date date = new java.sql.Date(millis);
+		String strDate = date.toString();
+		String[] parts = strDate.split("-");
+		parts[0] = Integer.toString(Integer.parseInt(parts[0]) - 30);
+		String result = String.join("", parts);
+		return Integer.parseInt(result);
+	}
+
+	public ListWithViewer<Kandidat> gibRentnerListe(){
+		int currDateminus30 = getDateminus30();
+		ListWithViewer<Kandidat> rentnerListe = new ListWithViewer<>();
+		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+			Kandidat curr = jungsListe.getContent();
+			if(curr.getGebDatum()<currDateminus30){
+				rentnerListe.append(curr);
+			}
+		}
+		return rentnerListe;
+	}
 
 
 	/*
