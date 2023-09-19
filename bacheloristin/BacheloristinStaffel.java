@@ -11,42 +11,70 @@ import linear.ListWithViewer;
 
 public class BacheloristinStaffel {
 
-	/*
-	 * // Attribute
-	 * private int jahr;
-	 * private Kandidat bacheloristin;
-	 * private ListWithViewer<Kandidat> jungsListe;
-	 * 
-	 * // Attribut testkandidat dient nur zum Testen der Methoden, die einen
-	 * Kandidat-Objekt als Parameter brauchen private Kandidat testkandidat;
-	 * 
-	 */
+	 // Attribute
+	 private int jahr;
+	 private Kandidat bacheloristin;
+	 private ListWithViewer<Kandidat> jungsListe;
+	 private Kandidat testkandidat;
+
+	 // Attribut testkandidat dient nur zum Testen der Methoden, die einen
+	 // Kandidat-Objekt als Parameter brauchen
+
+
 	 /**
 	 * Konstruktor für Objekte der Klasse BacheloristinStaffel
 	 */
-	 /*
+
 	public BacheloristinStaffel(int pJahr)
 	{
 		jahr = pJahr;		
 		jungsListe = new ListWithViewer<Kandidat>();
 
 		initJungsListeTestkandidatBacheloristin(pJahr);
-
-
 	}
 
 	// TODO: Teil 2: Aufgabe a) rausschmeissen
-	
+	public void rausschmeissen(String pName){
+		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+			if(jungsListe.getContent().getName().equals(pName)){
+				jungsListe.getContent().fliegtRaus();
+			}
+		}
+	}
 
 	// TODO: Teil 2: Aufgabe b) alleResetten
-	
+	public void alleResetten(){
+		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+			Kandidat curr = jungsListe.getContent();
+			curr.resetQuotenPunkte();
+		}
+	}
 
 	// TODO: Teil 2: Aufgabe c) anzahlAusgeschiedener
-	
+	public int anzahlAusgeschiedener(){
+		int result = 0;
+		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+			Kandidat curr = jungsListe.getContent();
+			if(!curr.isNochDabei()){
+				result++;
+			}
+		}
+		return result;
+	}
 
 
 	// TODO: Teil 2: Aufgabe d) hatGelaestert
-	
+
+	public void hatGelaestert(String pNameWer, String pNameUeberWen){
+		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
+			Kandidat curr = jungsListe.getContent();
+			if(curr.getName().equals(pNameWer)){
+				curr.erhoeheQuotenPunkte(20);
+			} else if (curr.getName().equals(pNameUeberWen)) {
+				curr.senkeQuotenPunkte(10);
+			}
+		}
+	}
 
 	// TODO: Teil 2: Aufgabe e) knutschtBacheloristin
 	
@@ -59,11 +87,11 @@ public class BacheloristinStaffel {
 
 
 
-	
+	/*
 	 * -------------------------------------------------------------------------------------------
 	 * ab hier nur noch init und main
 	 * -------------------------------------------------------------------------------------------
-	 
+	 */
 
 	private void initJungsListeTestkandidatBacheloristin(int pJahr) {
 		switch (pJahr) {
@@ -133,11 +161,10 @@ public class BacheloristinStaffel {
 		return "Jahr " + jahr + ", Bacheloristin: " + bacheloristin;
 	}
 
-	*/
-	/*
+
 	public static void main(String[] args) {
 		BacheloristinStaffel bs = new BacheloristinStaffel(2019);
 		new GUI(bs);
-	}*/
+	}
 
 }

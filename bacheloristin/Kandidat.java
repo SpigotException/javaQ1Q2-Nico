@@ -60,12 +60,20 @@ public class Kandidat {
     // Methoden
 
     public void erhoeheQuotenPunkte(int pErhoehung){
-
-        quotenPunkte += pErhoehung;
+        if(pErhoehung>=0) {
+            quotenPunkte += pErhoehung;
+        }
     }
 
     public void senkeQuotenPunkte(int pSenkung){
-        quotenPunkte -= pSenkung;
+        if(pSenkung >= 0){
+            if(pSenkung<=quotenPunkte) {
+                quotenPunkte -= pSenkung;
+            }else{
+                quotenPunkte = 0;
+            }
+        }
+
     }
 
     public void resetQuotenPunkte(){
