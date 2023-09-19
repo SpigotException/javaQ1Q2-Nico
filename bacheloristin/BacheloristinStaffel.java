@@ -37,6 +37,10 @@ public class BacheloristinStaffel {
 		initJungsListeTestkandidatBacheloristin(pJahr);
 	}
 
+	public ListWithViewer<Kandidat> getJungsListe(){
+		return jungsListe;
+	}
+
 	// TODO: Teil 2: Aufgabe a) rausschmeissen
 	public void rausschmeissen(String pName){
 		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){

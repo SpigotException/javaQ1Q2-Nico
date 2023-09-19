@@ -91,4 +91,9 @@ public class Kandidat {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Name: " + name + ", punkte: " + quotenPunkte;
+    }
 }
