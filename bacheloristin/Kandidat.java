@@ -85,9 +85,8 @@ public class Kandidat {
     }
 
     public boolean istAelterAls(Kandidat pAnderer){
-        boolean ergebnis = false;
         if(this.getGebDatum() < pAnderer.getGebDatum()){
-            ergebnis = true;
+            return true;
         }
         return false;
     }

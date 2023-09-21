@@ -65,7 +65,7 @@ public class BacheloristinVerwaltung {
         }
     }
 
-    public void insertRight(ListWithViewer<Location> pList, Location pLocation){
+    public void insertCorrect(ListWithViewer<Location> pList, Location pLocation){
         if(pList == null || pLocation == null){
             System.out.println("Debug List null or Location Null");
             return;
@@ -91,7 +91,7 @@ public class BacheloristinVerwaltung {
     public void sortiereLocationsNachPreis(){
         ListWithViewer<Location> helpList = new ListWithViewer<>();
         for(locationList.toFirst();locationList.hasAccess();){
-            insertRight(helpList, locationList.getContent());
+            insertCorrect(helpList, locationList.getContent());
             locationList.remove();
         }
         for(helpList.toFirst();helpList.hasAccess();helpList.next()){
