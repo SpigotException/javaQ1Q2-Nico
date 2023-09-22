@@ -43,6 +43,9 @@ public class BacheloristinStaffel {
 
 	// TODO: Teil 2: Aufgabe a) rausschmeissen
 	public void rausschmeissen(String pName){
+		if(pName == null || jungsListe == null){
+			return;
+		}
 		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
 			if(jungsListe.getContent().getName().equals(pName)){
 				jungsListe.getContent().fliegtRaus();
@@ -52,6 +55,9 @@ public class BacheloristinStaffel {
 
 	// TODO: Teil 2: Aufgabe b) alleResetten
 	public void alleResetten(){
+		if(jungsListe == null){
+			return;
+		}
 		for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
 			Kandidat curr = jungsListe.getContent();
 			curr.resetQuotenPunkte();
@@ -86,6 +92,9 @@ public class BacheloristinStaffel {
 
 	// TODO: Teil 2: Aufgabe e) knutschtBacheloristin
 	public void knutschBacheloristin(Kandidat pKandidat){
+		if(pKandidat == null || jungsListe == null){
+			return;
+		}
         for(jungsListe.toFirst();jungsListe.hasAccess();jungsListe.next()){
             Kandidat curr = jungsListe.getContent();
             if(curr.getName().equals(pKandidat.getName())){
