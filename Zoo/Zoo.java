@@ -9,27 +9,25 @@ public class Zoo {
     }
 
     public void initTiere(){
-        for(int i=0;i< tiere.length;i++){
-
-        }
+        //pass
     }
 
     public void alleFuettern(){
-        for(int i=0;i<tiere.length;i++){
-            tiere[i].fuettern();
+        for(Tier tier: tiere){
+            tier.fuettern();
         }
     }
 
     public void alleBuersten(){
-        for(int i=0;i<tiere.length;i++){
-            tiere[i].buersten();
+        for(Tier tier: tiere){
+            tier.buersten();
         }
     }
 
     public void raubisBruellenLassen(){
-        for(int i=0;i<tiere.length;i++){
-            if (tiere[i] instanceof Raubkatze){
-                (Raubkatze)tiere[i].bruellen();
+        for(Tier tier: tiere){
+            if (tier instanceof Raubkatze){
+                ((Raubkatze)tier).bruellen();
             }
 
         }
