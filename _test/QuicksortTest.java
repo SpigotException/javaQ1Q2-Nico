@@ -25,9 +25,9 @@ public class QuicksortTest {
 			return pStrings;
 		}
 
-		List<String> ergebnis = new List<String>();
-		List<String> left = new List<String>();
-		List<String> right = new List<String>();
+		List<String> ergebnis = new List<>();
+		List<String> left = new List<>();
+		List<String> right = new List<>();
 		//getting Pivot
 		pStrings.toFirst();
 		String pivot = pStrings.getContent();
@@ -63,9 +63,9 @@ public class QuicksortTest {
 			return pList;
 		}
 
-		List<Integer> ergebnis = new List<Integer>();
-		List<Integer> left = new List<Integer>();
-		List<Integer> right = new List<Integer>();
+		List<Integer> ergebnis = new List<>();
+		List<Integer> left = new List<>();
+		List<Integer> right = new List<>();
 		//getting Pivot
 		pList.toFirst();
 		int pivot = pList.getContent();
@@ -96,7 +96,7 @@ public class QuicksortTest {
 
 	public void quicksortTestKlein(){
 		anzahlVergleiche = 0;
-		avengers = new ListWithViewer<String>();
+		avengers = new ListWithViewer<>();
 		avengers.append("Iron Man");
 		avengers.append("Captain America");
 		avengers.append("Thor");
@@ -133,19 +133,19 @@ public class QuicksortTest {
 	}
 
 	public int CURSEDfactorial(int n){
-		switch (n){
-			case 1: return 1;
-			case 2: return 2 * 1;
-			case 3: return 3 * 2 * 1;
-			case 4: return 4 * 3 * 2 * 1;
-			case 5: return 5 * 4 * 3 * 2 * 1;
-			case 6: return 6 * 5 * 4 * 3 * 2 * 1;
-			case 7: return 7 * 6 * 5 * 4 * 3 * 2 * 1;
-			case 8: return 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
-			case 9: return 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
-			case 10: return 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
-			default: return fact(n);
-		}
+        return switch (n) {
+            case 1 -> 1;
+            case 2 -> 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
+            case 3 -> 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
+            case 4 -> 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
+            case 5 -> 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
+            case 6 -> 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1;
+            case 7 -> 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1;
+            case 8 -> 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1;
+            case 9 -> 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1;
+            case 10 -> 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+            default -> fact(n);
+        };
 	}
 
 	public int fact(int n){
