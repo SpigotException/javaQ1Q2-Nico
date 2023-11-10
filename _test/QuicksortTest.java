@@ -132,6 +132,30 @@ public class QuicksortTest {
 		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
 	}
 
+	public int CURSEDfactorial(int n){
+		switch (n){
+			case 1: return 1;
+			case 2: return 2 * 1;
+			case 3: return 3 * 2 * 1;
+			case 4: return 4 * 3 * 2 * 1;
+			case 5: return 5 * 4 * 3 * 2 * 1;
+			case 6: return 6 * 5 * 4 * 3 * 2 * 1;
+			case 7: return 7 * 6 * 5 * 4 * 3 * 2 * 1;
+			case 8: return 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+			case 9: return 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+			case 10: return 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+			default: return fact(n);
+		}
+	}
+
+	public int fact(int n){
+		return n == 1 ? 1 : n * fact(n-1);
+	}
+
+	public int fib(int n){
+		return n == 1 || n == 0 ? n : fib(n -1) + fib(n -2);
+	}
+
 	/**
 	 * erzeugt eine List mit zufaelligen Strings der Laenge 10.
 	 * @param pAnzahl
