@@ -94,6 +94,52 @@ public class QuicksortTest {
 		return ergebnis;
 	}
 
+	public List<Integer> mergesort(List<Integer> pList){
+		// if length == 1 -> return List
+		pList.toFirst();
+		pList.next();
+		if(!pList.hasAccess()){
+			return pList;
+		}
+		List<Integer> ergebnis = new List<>();
+		List<Integer> left = new List<>();
+		List<Integer> right = new List<>();
+		// Liste aufteilen / halbieren
+		int i=0;
+		for(pList.toFirst();pList.hasAccess();){
+			if (i%2 ==0){
+				left.append(pList.getContent());
+				pList.remove();
+			} else {
+				right.append(pList.getContent());
+				pList.remove();
+			}
+			i++;
+		}
+		// Liste rekursiv weiter aufteilen
+		left = mergesort(left);
+		right = mergesort(right);
+
+		left.toFirst();
+		right.toFirst();
+
+		while (left.hasAccess() && right.hasAccess()){
+			if(left.getContent() <= right.getContent()){
+				ergebnis.append(left.getContent());
+				left.remove();
+				anzahlVergleiche++;
+			}else {
+				ergebnis.append(right.getContent());
+				right.remove();
+				anzahlVergleiche++;
+			}
+
+		}
+		ergebnis.concat(left);
+		ergebnis.concat(right);
+		return ergebnis;
+	}
+
 	public void quicksortTestKlein(){
 		anzahlVergleiche = 0;
 		avengers = new ListWithViewer<>();
@@ -130,11 +176,30 @@ public class QuicksortTest {
 		long verbrauchteZeit = endzeit - startzeit;
 		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
 		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
+		if(verbrauchteZeit != 0){
+			System.out.println("~~~~~~~~~ Zeit pro Vergleich: " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms");
+		}
+
+	}
+
+	public void mergesortTestGross(int pAnzahl){
+		anzahlVergleiche = 0;
+		List<Integer> ints = erzeugen(pAnzahl);
+		long startzeit = System.currentTimeMillis();
+		List<Integer> ergebnis = mergesort(ints);
+		long endzeit = System.currentTimeMillis();
+		//intausgeben(ergebnis);
+		long verbrauchteZeit = endzeit - startzeit;
+		if(verbrauchteZeit != 0){
+			System.out.println("Mergesort test: " + pAnzahl + " Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen. Daraus folgen " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms" );
+		}else{
+			System.out.println("Mergesort test: " + pAnzahl + "Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen.");
+		}
 	}
 
 	public int CURSEDfactorial(int n){
         return switch (n) {
-            case 1 -> 1;
+            case 1 -> 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
             case 2 -> 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
             case 3 -> 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
             case 4 -> 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1 * 1 * 1 * 1;
@@ -143,7 +208,7 @@ public class QuicksortTest {
             case 7 -> 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1 * 1;
             case 8 -> 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1 * 1;
             case 9 -> 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1 * 1 * 1;
-            case 10 -> 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1;
+            case 10 -> 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1*1;
             default -> fact(n);
         };
 	}
@@ -188,6 +253,14 @@ public class QuicksortTest {
 		return ergebnis;
 	}
 
+	public void intausgeben(List<Integer> pInts){
+		System.out.println();
+		System.out.println("*** ausgeben() ***");
+		for(pInts.toFirst();pInts.hasAccess(); pInts.next()){
+			System.out.println(pInts.getContent());
+		}
+	}
+
 	public void ausgeben(List<String> pStrings){
 		System.out.println();
 		System.out.println("*** ausgeben() ***");
@@ -197,6 +270,12 @@ public class QuicksortTest {
 	}
 
 	public static void main(String[] args) {
-		new GUI(new QuicksortTest());
+		QuicksortTest q1 = new QuicksortTest();
+		//for(int i = 0; i<50; i += 5){
+		//	q1.quicksortTestGross(( i + 1 )  * 100000);
+		//}
+
+
+		new GUI(q1);
 	}
 }
