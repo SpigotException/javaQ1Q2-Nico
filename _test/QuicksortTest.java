@@ -3,6 +3,7 @@ package _test;
 
 import gui.GUI;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import linear.List;
@@ -174,10 +175,10 @@ public class QuicksortTest {
 		long endzeit = System.currentTimeMillis();
 		//ausgeben(ergebnis);
 		long verbrauchteZeit = endzeit - startzeit;
-		System.out.println("+++ Zeitverbrauch: "+verbrauchteZeit+"ms +++");
-		System.out.println("+++ Anzahl Vergleiche: "+anzahlVergleiche);
 		if(verbrauchteZeit != 0){
-			System.out.println("~~~~~~~~~ Zeit pro Vergleich: " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms");
+			System.out.println("Quicksort test: " + pAnzahl + " Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen. Daraus folgen " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms" );
+		}else{
+			System.out.println("Quicksort test: " + pAnzahl + "Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen.");
 		}
 
 	}
@@ -188,7 +189,6 @@ public class QuicksortTest {
 		long startzeit = System.currentTimeMillis();
 		List<Integer> ergebnis = mergesort(ints);
 		long endzeit = System.currentTimeMillis();
-		//intausgeben(ergebnis);
 		long verbrauchteZeit = endzeit - startzeit;
 		if(verbrauchteZeit != 0){
 			System.out.println("Mergesort test: " + pAnzahl + " Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen. Daraus folgen " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms" );
@@ -245,7 +245,7 @@ public class QuicksortTest {
 	public List<Integer> erzeugen(int pAnzahl){
 		List<Integer> ergebnis = new List<>();
 		Random r = new Random();
-		System.out.println("*** erzeugen("+pAnzahl+") ***");
+		//System.out.println("*** erzeugen("+pAnzahl+") ***");
 		for(int n=0; n<pAnzahl; n++){
 			int s = r.nextInt(1000000);
 			ergebnis.append(s);
@@ -271,9 +271,12 @@ public class QuicksortTest {
 
 	public static void main(String[] args) {
 		QuicksortTest q1 = new QuicksortTest();
-		//for(int i = 0; i<50; i += 5){
-		//	q1.quicksortTestGross(( i + 1 )  * 100000);
-		//}
+		for(int i = 10; i< 15; i ++){
+			int anzahl = (i +1) * 1000000;
+			q1.quicksortTestGross(anzahl);
+			q1.mergesortTestGross(anzahl);
+			System.out.println("----------------------------------------------------------------");
+		}
 
 
 		new GUI(q1);
