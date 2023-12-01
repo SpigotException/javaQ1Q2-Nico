@@ -141,6 +141,52 @@ public class QuicksortTest {
 		return ergebnis;
 	}
 
+	public List<String> mergesortStrings(List<String> pList){
+		// if length == 1 -> return List
+		pList.toFirst();
+		pList.next();
+		if(!pList.hasAccess()){
+			return pList;
+		}
+		List<String> ergebnis = new List<>();
+		List<String> left = new List<>();
+		List<String> right = new List<>();
+		// Liste aufteilen / halbieren
+		int i=0;
+		for(pList.toFirst();pList.hasAccess();){
+			if (i%2 ==0){
+				left.append(pList.getContent());
+				pList.remove();
+			} else {
+				right.append(pList.getContent());
+				pList.remove();
+			}
+			i++;
+		}
+		// Liste rekursiv weiter aufteilen
+		left = mergesortStrings(left);
+		right = mergesortStrings(right);
+
+		left.toFirst();
+		right.toFirst();
+
+		while (left.hasAccess() && right.hasAccess()){
+			if(left.getContent().compareToIgnoreCase(right.getContent()) <= 0){
+				ergebnis.append(left.getContent());
+				left.remove();
+				anzahlVergleiche++;
+			}else {
+				ergebnis.append(right.getContent());
+				right.remove();
+				anzahlVergleiche++;
+			}
+
+		}
+		ergebnis.concat(left);
+		ergebnis.concat(right);
+		return ergebnis;
+	}
+
 	public void quicksortTestKlein(){
 		anzahlVergleiche = 0;
 		avengers = new ListWithViewer<>();
@@ -150,6 +196,19 @@ public class QuicksortTest {
 		avengers.append("Spider Man");
 		avengers.append("Black Widow");
 		List<String> ergebnis = quicksortStrings(avengers);
+		for(ergebnis.toFirst(); ergebnis.hasAccess();ergebnis.next()){
+			System.out.println(ergebnis.getContent());
+		}
+	}
+	public void mergesortTestKlein(){
+		anzahlVergleiche = 0;
+		avengers = new ListWithViewer<>();
+		avengers.append("Iron Man");
+		avengers.append("Captain America");
+		avengers.append("Thor");
+		avengers.append("Spider Man");
+		avengers.append("Black Widow");
+		List<String> ergebnis = mergesortStrings(avengers);
 		for(ergebnis.toFirst(); ergebnis.hasAccess();ergebnis.next()){
 			System.out.println(ergebnis.getContent());
 		}
@@ -181,6 +240,20 @@ public class QuicksortTest {
 			System.out.println("Quicksort test: " + pAnzahl + "Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen.");
 		}
 
+	}
+
+	public void mergesortTestGrossStrings(int pAnzahl){
+		anzahlVergleiche = 0;
+		List<String> ints = stringserzeugen(pAnzahl);
+		long startzeit = System.currentTimeMillis();
+		List<String> ergebnis = mergesortStrings(ints);
+		long endzeit = System.currentTimeMillis();
+		long verbrauchteZeit = endzeit - startzeit;
+		if(verbrauchteZeit != 0){
+			System.out.println("Mergesort test: " + pAnzahl + " Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen. Daraus folgen " + anzahlVergleiche / verbrauchteZeit + " vergleiche/ms" );
+		}else{
+			System.out.println("Mergesort test: " + pAnzahl + "Elemente sortiert, in " + verbrauchteZeit + " Millisekunden und " + anzahlVergleiche + " vergleichen.");
+		}
 	}
 
 	public void mergesortTestGross(int pAnzahl){
@@ -268,17 +341,17 @@ public class QuicksortTest {
 			System.out.println(pStrings.getContent());
 		}
 	}
+	public void zeitmessen(){
+		for(int i = 10; i< 15; i ++){
+			int anzahl = (i +1) * 1000000;
+			quicksortTestGross(anzahl);
+			mergesortTestGross(anzahl);
+			System.out.println("----------------------------------------------------------------");
+		}
+	}
 
 	public static void main(String[] args) {
 		QuicksortTest q1 = new QuicksortTest();
-		for(int i = 10; i< 15; i ++){
-			int anzahl = (i +1) * 1000000;
-			q1.quicksortTestGross(anzahl);
-			q1.mergesortTestGross(anzahl);
-			System.out.println("----------------------------------------------------------------");
-		}
-
-
 		new GUI(q1);
 	}
 }
