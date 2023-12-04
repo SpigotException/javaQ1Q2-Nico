@@ -70,6 +70,14 @@ public class BinaryTreeTest {
         }
     }
 
+    public void postOrder(){
+        List<Integer> list = postOrder(suchbaum);
+        System.out.println("Post-Order Traversierung:");
+        for(list.toFirst();list.hasAccess();list.next()){
+            System.out.println(list.getContent());
+        }
+    }
+
     private int gibAnzahlKnoten(BinaryTree<Integer> pBaum){
         if(pBaum.isEmpty()){
             return 0;
@@ -122,6 +130,18 @@ public class BinaryTreeTest {
         ergebnis.concat(inOrder(pTree.getLeftTree()));
         ergebnis.append(pTree.getContent());
         ergebnis.concat(inOrder(pTree.getRightTree()));
+
+        return ergebnis;
+    }
+
+    private List<Integer> postOrder(BinaryTree<Integer> pTree){
+        List<Integer> ergebnis = new List<>();
+        if (pTree.isEmpty()){
+            return ergebnis;
+        }
+        ergebnis.concat(postOrder(pTree.getLeftTree()));
+        ergebnis.concat(postOrder(pTree.getRightTree()));
+        ergebnis.append(pTree.getContent());
 
         return ergebnis;
     }
