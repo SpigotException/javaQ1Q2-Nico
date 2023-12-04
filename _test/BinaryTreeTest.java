@@ -44,19 +44,87 @@ public class BinaryTreeTest {
         b71.setRightTree(b73);
         TreeViewer.showTree(suchbaum, 600, 400);
 	}
-	
+	public int gibAnzahlKnoten(){
+        return gibAnzahlKnoten(suchbaum);
+    }
 	// Rahmenmethode
 	public int summe(){
 		return summe(suchbaum);
 	}
-	
+
+    public int gibTiefe(){return gibTiefe(suchbaum);}
+
+    public void preOrder(){
+        List<Integer> list = preOrder(suchbaum);
+        System.out.println("Pre-Order Traversierung:");
+        for(list.toFirst();list.hasAccess();list.next()){
+            System.out.println(list.getContent());
+        }
+    }
+
+    public void inOrder(){
+        List<Integer> list = inOrder(suchbaum);
+        System.out.println("In-Order Traversierung:");
+        for(list.toFirst();list.hasAccess();list.next()){
+            System.out.println(list.getContent());
+        }
+    }
+
+    private int gibAnzahlKnoten(BinaryTree<Integer> pBaum){
+        if(pBaum.isEmpty()){
+            return 0;
+        }
+        int lAnzahl = gibAnzahlKnoten(pBaum.getLeftTree());
+        int rAnzahl = gibAnzahlKnoten(pBaum.getRightTree());
+        return (lAnzahl + 1 + rAnzahl);
+    }
 
 	private int summe(BinaryTree<Integer> pTree) {
 		int ergebnis = 0;
 		// TODO programmieren:
 		// Abbruchbedingung, Wurzelbehandlung, 2 rekursive Aufrufe, Sachlogik
+        if(pTree.isEmpty()){
+            return 0;
+        }
+        ergebnis += pTree.getContent();
+        ergebnis += summe(pTree.getLeftTree());
+        ergebnis += summe(pTree.getRightTree());
 		return ergebnis;
 	}
+
+    private int gibTiefe(BinaryTree<Integer> pTree){
+        if(pTree.isEmpty()){
+            return -1;
+        }
+        if(gibTiefe(pTree.getLeftTree()) < 0 && gibTiefe(pTree.getRightTree()) < 0){
+            return 0;
+        }
+        return gibTiefe(pTree.getLeftTree()) > gibTiefe(pTree.getRightTree()) ? gibTiefe(pTree.getLeftTree()) + 1 : gibTiefe(pTree.getRightTree()) + 1;
+    }
+
+    private List<Integer> preOrder(BinaryTree<Integer> pTree){
+        List<Integer> ergebnis = new List<>();
+        if (pTree.isEmpty()){
+            return ergebnis;
+        }
+        ergebnis.append(pTree.getContent());
+        ergebnis.concat(preOrder(pTree.getLeftTree()));
+        ergebnis.concat(preOrder(pTree.getRightTree()));
+
+        return ergebnis;
+    }
+
+    private List<Integer> inOrder(BinaryTree<Integer> pTree){
+        List<Integer> ergebnis = new List<>();
+        if (pTree.isEmpty()){
+            return ergebnis;
+        }
+        ergebnis.concat(inOrder(pTree.getLeftTree()));
+        ergebnis.append(pTree.getContent());
+        ergebnis.concat(inOrder(pTree.getRightTree()));
+
+        return ergebnis;
+    }
 
 	public static void main(String[] args) {
 		new GUI(new BinaryTreeTest());
