@@ -106,11 +106,61 @@ public class BinaryTreeTest {
     //Implementierungen
 
     private boolean remove(BinaryTree<Integer> pTree, int pNumber){
+        //TODO: Schöner machen? / verständlocher machen mit hilfsmethoden!
         if(!istEnthalten(suchbaum, pNumber)){
             return false;
         }
-
-        return true;
+        BinaryTree<Integer> rtb = pTree.getRightTree();
+        BinaryTree<Integer> ltb = pTree.getLeftTree();
+        BinaryTree<Integer> ltbr = ltb.getRightTree();
+        BinaryTree<Integer> rtbr = rtb.getRightTree();
+        BinaryTree<Integer> core;
+        //Vor die gefundene Zahl gehen
+        if(pNumber > pTree.getContent()){
+        if(rtb.getContent() != pNumber){
+            remove(rtb, pNumber);
+        }else{
+            //wenn gefunden:
+            if(rtb.getRightTree().isEmpty() && rtb.getLeftTree().isEmpty()){
+                pTree.setRightTree(rtb.getRightTree());
+            }else if(rtb.getRightTree().isEmpty()){
+                pTree.setRightTree(rtb.getLeftTree());
+            }else if(rtb.getLeftTree().isEmpty()){
+                pTree.setRightTree(rtb.getRightTree());
+            }else{
+                core = mostLeftElement(rtbr);
+                remove(core.getContent());
+                core.setLeftTree(rtb.getLeftTree());
+                core.setRightTree(rtb.getRightTree());
+                pTree.setRightTree(core);
+            }
+            return true;
+        }
+        }
+        //Vor die gefundene Zahl gehen
+        if(pNumber < pTree.getContent()){
+        if(ltb.getContent() != pNumber){
+            remove(ltb, pNumber);
+        }else{
+            //wenn gefunden:
+            if(ltb.getRightTree().isEmpty() && ltb.getLeftTree().isEmpty()){
+                pTree.setLeftTree(ltb.getRightTree());
+            }else if(ltb.getRightTree().isEmpty()){
+                pTree.setLeftTree(ltb.getLeftTree());
+            }else if(ltb.getLeftTree().isEmpty()){
+                pTree.setLeftTree(ltb.getRightTree());
+            }else{
+                core = mostLeftElement(ltbr);
+                remove(core.getContent());
+                core.setLeftTree(ltb.getLeftTree());
+                core.setRightTree(ltb.getRightTree());
+                pTree.setLeftTree(core);
+            }
+            return true;
+        }
+            return true;
+        }
+        return false;
     }
 
     private List<Integer> gibBlaetterList(BinaryTree<Integer> pTree){
@@ -149,6 +199,13 @@ public class BinaryTreeTest {
             pTree = pTree.getRightTree();
         }
         return pTree.getContent();
+    }
+
+    private BinaryTree<Integer> mostLeftElement(BinaryTree<Integer> pTree){
+        while(!pTree.getLeftTree().isEmpty()){
+            pTree = pTree.getLeftTree();
+        }
+        return pTree;
     }
 
     private boolean istEnthalten(BinaryTree<Integer> pTree, int pNumber){
