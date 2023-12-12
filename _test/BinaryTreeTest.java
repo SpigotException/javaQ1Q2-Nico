@@ -115,6 +115,7 @@ public class BinaryTreeTest {
         BinaryTree<Integer> ltbr = ltb.getRightTree();
         BinaryTree<Integer> rtbr = rtb.getRightTree();
         BinaryTree<Integer> core;
+
         //Vor die gefundene Zahl gehen
         if(pNumber > pTree.getContent()){
         if(rtb.getContent() != pNumber){
@@ -158,6 +159,21 @@ public class BinaryTreeTest {
             }
             return true;
         }
+            return true;
+        }
+        if(pTree.getContent() == pNumber){
+            //Wurzel entfernen
+            if(pTree.getRightTree().isEmpty() && pTree.getLeftTree().isEmpty()){
+                pTree.setLeftTree(pTree.getRightTree());
+            }else if(pTree.getRightTree().isEmpty()){
+                pTree.setLeftTree(pTree.getLeftTree());
+            }else if(pTree.getLeftTree().isEmpty()){
+                pTree.setLeftTree(pTree.getRightTree());
+            }else{
+                core = mostLeftElement(rtb);
+                remove(core.getContent());
+                pTree.setContent(core.getContent());
+            }
             return true;
         }
         return false;
