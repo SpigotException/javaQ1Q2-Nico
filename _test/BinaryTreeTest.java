@@ -44,10 +44,12 @@ public class BinaryTreeTest {
         b71.setRightTree(b73);
         TreeViewer.showTree(suchbaum, 600, 400);
 	}
+
+    // Rahmenmethoden
 	public int gibAnzahlKnoten(){
         return gibAnzahlKnoten(suchbaum);
     }
-	// Rahmenmethode
+
 	public int summe(){
 		return summe(suchbaum);
 	}
@@ -76,6 +78,87 @@ public class BinaryTreeTest {
         for(list.toFirst();list.hasAccess();list.next()){
             System.out.println(list.getContent());
         }
+    }
+
+    public boolean istEnthalten(int pNumber){
+        return istEnthalten(suchbaum, pNumber);
+    }
+
+    public int mostRightElement(){
+        return mostRightElement(suchbaum);
+    }
+
+    public void einfuegen(int pNumber){
+        einfuegen(suchbaum, pNumber);
+    }
+
+    public void gibBlaetterList(){
+        List<Integer> ergebnis = gibBlaetterList(suchbaum);
+        for(ergebnis.toFirst(); ergebnis.hasAccess();ergebnis.next()){
+            System.out.println(ergebnis.getContent());
+        }
+    }
+
+    public void remove(int pNumber){
+        remove(suchbaum, pNumber);
+    }
+
+    //Implementierungen
+
+    private boolean remove(BinaryTree<Integer> pTree, int pNumber){
+        if(!istEnthalten(suchbaum, pNumber)){
+            return false;
+        }
+
+        return true;
+    }
+
+    private List<Integer> gibBlaetterList(BinaryTree<Integer> pTree){
+        List<Integer> ergebnis = new List<>();
+        if(pTree.isEmpty()){
+            return ergebnis;
+        }
+        if(((pTree.getLeftTree().isEmpty() || pTree.getLeftTree() == null) && (pTree.getRightTree().isEmpty() || pTree.getRightTree() == null))){
+            ergebnis.append(pTree.getContent());
+        }
+        ergebnis.concat(gibBlaetterList(pTree.getLeftTree()));
+        ergebnis.concat(gibBlaetterList(pTree.getRightTree()));
+        return ergebnis;
+    }
+
+    private void einfuegen(BinaryTree<Integer> pTree, int pNumber){
+        if(pTree.getContent() == pNumber){
+            return;
+        }
+
+        if(pNumber < pTree.getContent() && !pTree.getLeftTree().isEmpty()){
+            einfuegen(pTree.getLeftTree(), pNumber);
+        }else if (pNumber < pTree.getContent()){
+            pTree.setLeftTree(new BinaryTree<>(pNumber));
+        }
+
+        if(pNumber > pTree.getContent() && !pTree.getRightTree().isEmpty()){
+            einfuegen(pTree.getRightTree(), pNumber);
+        }else if (pNumber > pTree.getContent()){
+            pTree.setRightTree(new BinaryTree<>(pNumber));
+        }
+    }
+
+    private int mostRightElement(BinaryTree<Integer> pTree){
+        while(!pTree.getRightTree().isEmpty()){
+            pTree = pTree.getRightTree();
+        }
+        return pTree.getContent();
+    }
+
+    private boolean istEnthalten(BinaryTree<Integer> pTree, int pNumber){
+        if(pTree.isEmpty()){
+            return false;
+        }
+        if(pTree.getContent() == pNumber){
+            return true;
+        }
+        return istEnthalten(pTree.getLeftTree(), pNumber)||istEnthalten(pTree.getRightTree(), pNumber);
     }
 
     private int gibAnzahlKnoten(BinaryTree<Integer> pBaum){
