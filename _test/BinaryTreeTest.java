@@ -106,7 +106,7 @@ public class BinaryTreeTest {
     //Implementierungen
 
     private boolean remove(BinaryTree<Integer> pTree, int pNumber){
-        //TODO: Schöner machen? / verständlocher machen mit hilfsmethoden!
+        //TODO: Schöner machen? / verständlicher machen mit hilfsmethoden!
         if(!istEnthalten(suchbaum, pNumber)){
             return false;
         }
