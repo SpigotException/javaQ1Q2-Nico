@@ -11,15 +11,12 @@ public class Standort implements ComparableContent<Standort> {
     public Standort(String name, String land) {
         this.name = name;
         this.land = land;
+        this.hotels = new List<Hotel>();
     }
 
     @Override
     public String toString() {
-        return "Standort{" +
-                "name='" + name + '\'' +
-                ", land='" + land + '\'' +
-                ", hotels=" + hotels +
-                '}';
+        return "" + name;
     }
 
     public String getName() {
@@ -65,10 +62,10 @@ public class Standort implements ComparableContent<Standort> {
     }
 
     public boolean isEqual(Standort pStandort) {
-        return this.getName().compareTo(pStandort.getName()) < 0;
+        return this.getName().compareTo(pStandort.getName()) == 0;
     }
 
     public boolean isLess(Standort pStandort) {
-        return this.getName().compareTo(pStandort.getName()) == 0;
+        return this.getName().compareTo(pStandort.getName()) < 0;
     }
 }

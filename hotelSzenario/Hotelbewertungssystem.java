@@ -1,6 +1,7 @@
 package hotelSzenario;
 
 import baeume.BinarySearchTree;
+import gui.GUI;
 
 
 public class Hotelbewertungssystem {
@@ -63,11 +64,17 @@ public class Hotelbewertungssystem {
     }
 
     public Hotelbewertungssystem() {
+        this.orte = new BinarySearchTree<>();
         this.generateOrte();
     }
 
-    public void main(){
-        Hotelbewertungssystem h1 = new Hotelbewertungssystem();
+    public void bewerteHotel(String pStandortName,String pHotelname,int pBewertung){};
+
+    //public void gibHotel(); //TODO
+
+    public static void main(String[] args){
+        Hotelbewertungssystem hbs1 = new Hotelbewertungssystem();
+        new GUI(hbs1);
     }
 }
 

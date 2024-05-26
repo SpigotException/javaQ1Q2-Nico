@@ -6,11 +6,13 @@ public class BinarySearchTree<ContentType extends ComparableContent<ContentType>
 	private BinaryTree<ContentType> myTree;
 
 	public BinarySearchTree(){
-		myTree = new BinaryTree<>();		
+		myTree = new BinaryTree<>();
+		TreeViewer.showTree(myTree, 600, 400);
 	}
 
 	private BinarySearchTree(BinaryTree<ContentType> pTree){
 		myTree = pTree;
+		TreeViewer.showTree(pTree, 600, 400);
 	}
 
 	/**

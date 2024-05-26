@@ -1,7 +1,7 @@
 package _test;
 
 
-import java.util.Vector;
+import java.util.*;
 
 import graph.Edge;
 import graph.Graph;
@@ -29,6 +29,28 @@ public class GraphTest {
 	private List<Vertex> tiefendurchlauf(Vertex pVertex) {
 		List<Vertex> ergebnis = new ListWithViewer<>();
 		// TODO selber programmieren!!!
+
+		if (pVertex.isMarked())
+			return ergebnis;
+
+		// get neighbor list
+		List<Vertex> neighbors = karte.getNeighbours(pVertex);
+
+		// add current Vertex to ergebnis
+		ergebnis.append(pVertex);
+
+		// mark current Vertex
+		pVertex.setMark(true);
+
+		// add all the Neighbors that aren`t yet marked
+		for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+			if(!neighbors.getContent().isMarked()){
+				// call method recursively
+				List<Vertex> listOfNeighbor = tiefendurchlauf(neighbors.getContent());
+				ergebnis.concat(listOfNeighbor);
+			}
+		}
+
 		return ergebnis;
 	}
 
@@ -44,7 +66,112 @@ public class GraphTest {
 	private List<Vertex> breitendurchlauf(Vertex pVertex) {
 		List<Vertex> ergebnis = new ListWithViewer<>();
 		// TODO selber programmieren!!!
+
+		// add CurrVertex and mark it
+		ergebnis.append(pVertex);
+		pVertex.setMark(true);
+
+		//"Levelorder"
+
+		for(ergebnis.toFirst(); ergebnis.hasAccess();ergebnis.next()){
+			List<Vertex> neighbors = karte.getNeighbours(ergebnis.getContent());
+			for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+				if(!neighbors.getContent().isMarked()){
+					neighbors.getContent().setMark(true);
+					ergebnis.append(neighbors.getContent());
+				}
+			}
+		}
+
 		return ergebnis;
+	}
+
+	// Remove a given Vertex from a List of Vertices
+	private void removeVertexFromList(List<Vertex> list, Vertex v){
+		for(list.toFirst(); list.hasAccess();list.next()) {
+			if (list.getContent().getID().equals(v.getID())){
+				list.remove();
+			}
+		}
+	}
+
+	private List<Vertex> Dijkstra(Vertex pStart, Vertex pEnd){
+		// Set all Vertices to unmarked
+		karte.setAllVertexMarks(false);
+
+		// Distanz Hashmap
+		HashMap<String, Double> distances = new HashMap<>();
+
+		// path Hashmap to track the previous Vertex for each one
+		HashMap<Vertex, Vertex> path = new HashMap<>();
+
+		// Set of unvisited vertices
+		List<Vertex> unvisitedList = karte.getVertices();
+		Set<Vertex> unvisited = new HashSet<Vertex>();
+		for(unvisitedList.toFirst(); unvisitedList.hasAccess();unvisitedList.next()){
+			unvisited.add(unvisitedList.getContent());
+		}
+
+		// set cost for all vertices to infinity
+		for(Vertex v: unvisited){
+			distances.put(v.getID(), Double.POSITIVE_INFINITY);
+			path.put(v, v);
+		}
+
+		// "Visit" the start Node and remove it from Set
+		distances.put(pStart.getID(), 0.0);
+
+		Vertex current = pStart;
+
+		while(!unvisited.isEmpty()){
+			// remove current Node from unvisited Set
+			unvisited.remove(current);
+			current.setMark(true);
+			// get all neighbors of the current Node
+			List<Vertex> neighbors = karte.getNeighbours(current);
+			// Update Distances for reachable Vertices
+			for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+				if(distances.get(neighbors.getContent().getID()) > karte.getEdge(current, neighbors.getContent()).getWeight() + distances.get(current.getID())){
+					distances.put(neighbors.getContent().getID(), karte.getEdge(current, neighbors.getContent()).getWeight() + distances.get(current.getID()));
+					path.put(neighbors.getContent(), current);
+				}
+			}
+			// new Vertex is now Closest vertex
+			// INFO i am confused by what i am doing but it works
+			//Vertex newVertex = getClosestUnmarkedNeighbor(current);
+			//if(newVertex == null) {
+
+				// currently getting the lowest cost out of the openset
+				Double dist = Double.POSITIVE_INFINITY;
+				Vertex best = null;
+				for(Vertex v: unvisited){
+					if(distances.get(v.getID()) < dist){
+						dist = distances.get(v.getID());
+						best = v;
+					}
+				}
+
+				if (best == null)
+					break;
+				Vertex newVertex = best;
+			//}
+			current = newVertex;
+		}
+		// INFO Backtrack the path
+		List<Vertex> ergebnis = new List<>();
+		Vertex curr = pEnd;
+		while(curr != pStart){
+			ergebnis.append(curr);
+			curr = path.get(curr);
+		}
+		ergebnis.append(pStart);
+
+		return ergebnis;
+		//return distances.get(pEnd.getID());
+	}
+
+	public List<Vertex> shortestPath(String pStart, String pEnd){
+		return Dijkstra(karte.getVertex(pStart), karte.getVertex(pEnd));
 	}
 
 
@@ -178,12 +305,75 @@ public class GraphTest {
 		}
 		
 	}
+
+	public String getClosestNeighbor(String p1){
+		Vertex v = karte.getVertex(p1);
+		List<Vertex> neighbors = karte.getNeighbours(v);
+		neighbors.toFirst();
+		Vertex nearest = neighbors.getContent();
+		for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+			Vertex currNeighbor = neighbors.getContent();
+			Edge e = karte.getEdge(v, currNeighbor);
+			if(e.getWeight() < karte.getEdge(v, nearest).getWeight()){
+				nearest = currNeighbor;
+			}
+		}
+		return nearest.getID();
+	}
+
+	public Vertex getClosestUnmarkedNeighbor(Vertex v){
+		List<Vertex> neighbors = karte.getNeighbours(v);
+		neighbors.toFirst();
+		// get first unmarked Vertex
+		Vertex nearest = null;
+		for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+			if(!neighbors.getContent().isMarked()) {
+				nearest = neighbors.getContent();
+			}
+		}
+		if (nearest == null){
+			return null;
+		}
+		for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+			if(!neighbors.getContent().isMarked()) {
+				Vertex currNeighbor = neighbors.getContent();
+				Edge e = karte.getEdge(v, currNeighbor);
+				if (e.getWeight() < karte.getEdge(v, nearest).getWeight()) {
+					nearest = currNeighbor;
+				}
+			}
+		}
+		return nearest;
+	}
+
+	public Vertex getClosestNeighbor(Vertex v){
+		List<Vertex> neighbors = karte.getNeighbours(v);
+		neighbors.toFirst();
+		Vertex nearest = neighbors.getContent();
+		for(neighbors.toFirst(); neighbors.hasAccess();neighbors.next()){
+			Vertex currNeighbor = neighbors.getContent();
+			Edge e = karte.getEdge(v, currNeighbor);
+			if(e.getWeight() < karte.getEdge(v, nearest).getWeight()){
+				nearest = currNeighbor;
+			}
+		}
+		return nearest;
+	}
 	
 
 	
 	public static void main(String[] args) {
 		GraphTest gt = new GraphTest();
 		new GUI(gt);
+
+
+		// MEthods
+		System.out.println("Muenchen to Bremen:");
+		List<Vertex> umgedreht = gt.shortestPath("Muenchen", "Bremen");
+		for(umgedreht.toFirst(); umgedreht.hasAccess();umgedreht.next()){
+			System.out.println(umgedreht.getContent().getID());
+		}
+
 	}
 
 }
