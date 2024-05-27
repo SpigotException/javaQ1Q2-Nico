@@ -322,6 +322,11 @@ public class List<ContentType> {
     }
   }
 
+  public ContentType getPrev() {
+    // test
+    return getPrevious(current).getContentObject();
+  }
+
   /**
    * Liefert den Vorgaengerknoten des Knotens pNode. Ist die Liste leer, pNode
    * == null, pNode nicht in der Liste oder pNode der erste Knoten der Liste,
@@ -344,6 +349,8 @@ public class List<ContentType> {
       return null;
     }
   }
+
+
   
   
   

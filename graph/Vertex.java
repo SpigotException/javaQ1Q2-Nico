@@ -20,6 +20,8 @@ public class Vertex{
   //Einmalige ID des Knotens und Markierung
   private String id;
   private boolean mark;
+  private Double longitude;
+  private Double latitude;
   
   private VertexListener listener;
 
@@ -30,14 +32,33 @@ public class Vertex{
     id = pID;
     mark = false;
   }
-  
+
+  /**
+   * Ein neues Objekt vom Typ Vertex mit Koordinaten wird erstellt.
+   */
+  public Vertex(String pID, Double pLat, Double pLong){
+    id = pID;
+    mark = false;
+    latitude = pLat;
+    longitude = pLong;
+  }
+
   /**
   * Die Anfrage liefert die ID des Knotens als String.
   */
   public String getID(){
     return new String(id);
   }
-  
+
+
+  public Double getLatitude() {
+    return latitude;
+  }
+
+  public Double getLongitude() {
+    return longitude;
+  }
+
   /**
   * Der Auftrag setzt die Markierung des Knotens auf den Wert pMark.
   */
