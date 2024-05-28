@@ -1,6 +1,7 @@
 package _test;
 
 
+import java.sql.Array;
 import java.util.*;
 
 import graph.Edge;
@@ -162,7 +163,6 @@ public class GraphTest {
 	// rekursive Methode
 	private List<Vertex> tiefendurchlauf(Vertex pVertex) {
 		List<Vertex> ergebnis = new ListWithViewer<>();
-		// TODO selber programmieren!!!
 
 		if (pVertex.isMarked())
 			return ergebnis;
@@ -199,7 +199,6 @@ public class GraphTest {
 	// NICHT-rekursive Methode
 	private List<Vertex> breitendurchlauf(Vertex pVertex) {
 		List<Vertex> ergebnis = new ListWithViewer<>();
-		// TODO selber programmieren!!!
 
 		// add CurrVertex and mark it
 		ergebnis.append(pVertex);
@@ -268,6 +267,18 @@ public class GraphTest {
 		return nearest.getID();
 	}
 
+	private List<Vertex> getUnmarkedNeighbors(Vertex v, ArrayList<Vertex> marked){
+		List<Vertex> neighbors = karte.getNeighbours(v);
+		for(neighbors.toFirst(); neighbors.hasAccess();){
+			if(marked.contains(neighbors.getContent())){
+				neighbors.remove();
+			}else{
+				neighbors.next();
+			}
+		}
+		return neighbors;
+	}
+
 	public Vertex getClosestUnmarkedNeighbor(Vertex v){
 		List<Vertex> neighbors = karte.getNeighbours(v);
 		neighbors.toFirst();
@@ -307,9 +318,115 @@ public class GraphTest {
 		return nearest;
 	}
 
-	public void minimunSpanningTree(Vertex pStart){
-		// prims algorithm
+	public Vertex[] getClosestUnmarkedNeighbor(GraphWithViewer graph){
+		List<Vertex> besuchte = graph.getVertices();
 
+		for(besuchte.toFirst(); besuchte.hasAccess();){
+			if(!besuchte.getContent().isMarked()){
+				besuchte.remove();
+			}
+			else{
+				besuchte.next();
+			}
+		}
+
+		besuchte.toFirst();
+		Vertex v1 = besuchte.getContent();
+		List<Vertex> neighbors = graph.getNeighbours(v1);
+		neighbors.toFirst();
+		Vertex kürzesteStart = v1;
+		Vertex kürzeste = neighbors.getContent();
+
+		for(besuchte.toFirst(); besuchte.hasAccess();besuchte.next()){
+			v1 = besuchte.getContent();
+			List<Vertex> besuchteNeighbors = graph.getNeighbours(v1);
+			for(besuchteNeighbors.toFirst(); besuchteNeighbors.hasAccess();besuchteNeighbors.next()){
+				Vertex currentUnvisitedNeighbor = besuchteNeighbors.getContent();
+				double currentWeight = graph.getEdge(v1, currentUnvisitedNeighbor).getWeight();
+				double shortestWeight = graph.getEdge(kürzesteStart, kürzeste).getWeight();
+				if(currentWeight < shortestWeight){
+					kürzesteStart = v1;
+					kürzeste = currentUnvisitedNeighbor;
+				}
+			}
+		}
+		Vertex[] ergebnis = {kürzesteStart, kürzeste};
+		return ergebnis;
+	}
+
+	public Vertex[] getClosestUnmarkedNeighbor(List<Vertex> besuchte){
+
+		//TODO Use arraylist and contains
+
+		ArrayList<Vertex> besuchteCopy = new ArrayList<>();
+		for(besuchte.toFirst(); besuchte.hasAccess();besuchte.next()){
+			besuchteCopy.add(besuchte.getContent());
+		}
+
+		besuchte.toFirst();
+		Vertex v1 = besuchte.getContent();
+		Vertex kürzesteStart = new Vertex("test1");
+		Vertex kürzeste = new Vertex("test2");
+		double shortestPath = Double.POSITIVE_INFINITY;
+
+		for(besuchte.toFirst(); besuchte.hasAccess();besuchte.next()){
+			v1 = besuchte.getContent();
+			List<Vertex> besuchteNeighbors = getUnmarkedNeighbors(v1, besuchteCopy);
+			for(besuchteNeighbors.toFirst(); besuchteNeighbors.hasAccess();besuchteNeighbors.next()){
+				Vertex currentUnvisitedNeighbor = besuchteNeighbors.getContent();
+				double currentWeight = karte.getEdge(v1, currentUnvisitedNeighbor).getWeight();
+				if(currentWeight < shortestPath){
+					kürzesteStart = v1;
+					kürzeste = currentUnvisitedNeighbor;
+					shortestPath = karte.getEdge(kürzesteStart, kürzeste).getWeight();
+				}
+			}
+		}
+		Vertex[] ergebnis = {kürzesteStart, kürzeste};
+		return ergebnis;
+	}
+
+	public GraphWithViewer minimumSpanningTree(Vertex pStart){
+		// prims algorithm
+		GraphWithViewer graph = new GraphWithViewer();
+
+		// Set all Vertices to unmarked
+		this.karte.setAllVertexMarks(false);
+
+
+		List<Vertex> marked = new List<>();
+		// Set of unvisited vertices
+		List<Vertex> unvisitedList = karte.getVertices();
+		Set<Vertex> unvisited = new HashSet<>();
+		for(unvisitedList.toFirst(); unvisitedList.hasAccess();unvisitedList.next()){
+			unvisited.add(unvisitedList.getContent());
+		}
+
+		Vertex current = pStart;
+
+		while(!unvisited.isEmpty()){
+
+			marked.append(current);
+
+			unvisited.remove(current);
+
+			graph.addVertex(current);
+
+			// INFO get minimum edge outgoing from all visited
+
+			Vertex[] newEdge = getClosestUnmarkedNeighbor(marked);
+			if(newEdge[1].getID().equals("test2")){
+				break;
+			}
+			graph.addVertex(newEdge[1]);
+			graph.addEdge(new Edge(newEdge[0], newEdge[1], karte.getEdge(newEdge[0], newEdge[1]).getWeight()));
+			current = newEdge[1];
+		}
+
+
+		graph.switchToISOMLayout();
+
+		return graph;
 	}
 
 	private Double calculateDistance(Vertex pStart, Vertex pEnd){
@@ -338,7 +455,7 @@ public class GraphTest {
 		return aStar(karte.getVertex(pStart), karte.getVertex(pEnd));
 	}
 
-	//TODO: A* Algorithm
+	//INFO: A* Algorithm
 	public List<Vertex> aStar(Vertex pStart, Vertex pEnd){
 		karte.setAllVertexMarks(false);
 
@@ -498,22 +615,25 @@ public class GraphTest {
 		}
 		ergebnis.append(pStart);
 
-		// TODO Reverse the ergbenis List, because it is Reversed rigth now
+		// INFO Reverse the ergbenis List, because it is Reversed rigth now
 		reverseList(ergebnis);
 		return ergebnis;
 		//return distances.get(pEnd.getID());
 	}
 
 	public static void main(String[] args) {
-		GraphTest gt = new GraphTest();
-		new GUI(gt);
+		GraphTest gt1 = new GraphTest();
+		new GUI(gt1);
+
+		//GraphTest gt2 = new GraphTest();
+		//new GUI(gt2);
 
 		String pStart = "Koeln";
 		String pEnd = "Hamburg";
-		// Methods
-
+		// Dijkstra and A*
+		/*
 		System.out.println(pStart + " to " + pEnd + ":");
-		List<Vertex> dijkstra = gt.shortestPath(pStart, pEnd);
+		List<Vertex> dijkstra = gt1.shortestPath(pStart, pEnd);
 		for(dijkstra.toFirst(); dijkstra.hasAccess();dijkstra.next()){
 			System.out.println(dijkstra.getContent().getID());
 		}
@@ -523,15 +643,18 @@ public class GraphTest {
 		System.out.println(" ");
 
 
-		List<Vertex> aStar = gt.bestPath(pStart, pEnd);
+
+		List<Vertex> aStar = gt2.bestPath(pStart, pEnd);
 		for(aStar.toFirst(); aStar.hasAccess();aStar.next()){
 			System.out.println(aStar.getContent().getID());
 		}
+		*/
 
 
+		//System.out.println("ca. " + gt1.calculateDistance(gt1.karte.getVertex(pStart), gt1.karte.getVertex(pEnd)) + "km");
 
-		System.out.println("ca. " + gt.calculateDistance(gt.karte.getVertex(pStart), gt.karte.getVertex(pEnd)) + "km");
-
+		GraphWithViewer temp = gt1.minimumSpanningTree(gt1.karte.getVertex("Aachen"));
+		new GUI(temp);
 	}
 
 }
