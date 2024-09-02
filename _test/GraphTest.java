@@ -625,13 +625,13 @@ public class GraphTest {
 		GraphTest gt1 = new GraphTest();
 		new GUI(gt1);
 
-		//GraphTest gt2 = new GraphTest();
-		//new GUI(gt2);
+		GraphTest gt2 = new GraphTest();
+		new GUI(gt2);
 
 		String pStart = "Koeln";
 		String pEnd = "Hamburg";
 		// Dijkstra and A*
-		/*
+
 		System.out.println(pStart + " to " + pEnd + ":");
 		List<Vertex> dijkstra = gt1.shortestPath(pStart, pEnd);
 		for(dijkstra.toFirst(); dijkstra.hasAccess();dijkstra.next()){
@@ -648,13 +648,13 @@ public class GraphTest {
 		for(aStar.toFirst(); aStar.hasAccess();aStar.next()){
 			System.out.println(aStar.getContent().getID());
 		}
-		*/
 
 
-		//System.out.println("ca. " + gt1.calculateDistance(gt1.karte.getVertex(pStart), gt1.karte.getVertex(pEnd)) + "km");
 
-		GraphWithViewer temp = gt1.minimumSpanningTree(gt1.karte.getVertex("Aachen"));
-		new GUI(temp);
+		System.out.println("ca. " + gt1.calculateDistance(gt1.karte.getVertex(pStart), gt1.karte.getVertex(pEnd)) + "km");
+
+		//GraphWithViewer temp = gt1.minimumSpanningTree(gt1.karte.getVertex("Aachen"));
+		//new GUI(temp);
 	}
 
 }
