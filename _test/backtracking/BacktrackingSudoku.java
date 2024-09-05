@@ -28,6 +28,7 @@ public class BacktrackingSudoku {
 	       else{
 	           System.out.println("keine Loesung");
 	       }
+		   s.ausgeben();
 	   }
 	   
 	   public boolean loesenMitBacktracking(int pStufe){
@@ -37,7 +38,22 @@ public class BacktrackingSudoku {
 	       int[] bestesFeld = feldMitDenWenigstenMoeglichkeiten();
 	       int zeile = bestesFeld[0];
 	       int spalte = bestesFeld[1];
-	       // 
+	       // TODO
+
+		   // Es gibt keine Möglichen Felder mehr
+		   if (zeile == -1 || spalte == -1) return false;
+
+		   for (int z = 1; z <= 9; z++){
+			   if (istMoeglich(z, zeile, spalte)){
+					eintragen(z, zeile, spalte);
+					if (loesenMitBacktracking(pStufe + 1)) {
+						return true;
+					}
+			   }
+			   if (z == 9){
+				   eintragen(0, zeile, spalte);
+			   }
+		   }
 	       return false;
 	   }
 
