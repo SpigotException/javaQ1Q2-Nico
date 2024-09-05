@@ -24,8 +24,22 @@ public class BacktrackingRucksackproblem {
 	}
 
 	public void sucheBesteLoesung(int pStufe) {
-		dabeiArrayAusgeben();
-		//TODO
+		//dabeiArrayAusgeben();
+
+		erreichtesGewicht = berechneGewicht(dabei);
+		if (erreichtesGewicht > maxGewicht || pStufe == dabei.length) return;
+
+		if (erreichtesGewicht > bestesGewicht){
+			kopiereInBesteLoesung();
+			bestesGewicht = erreichtesGewicht;
+		}
+
+		dabei[pStufe] = true;
+		sucheBesteLoesung(pStufe + 1);
+
+		dabei[pStufe] = false;
+		sucheBesteLoesung(pStufe + 1);
+
 	}
 	
 	public void ausgeben(boolean[] b){
@@ -49,10 +63,7 @@ public class BacktrackingRucksackproblem {
 		}
 		System.out.println();
 	}
-	
-	
-	
-	
+
 	public void kopiereInBesteLoesung(){
 		for(int i=0; i<dabei.length; i++){
 			besteLoesung[i] = dabei[i];
