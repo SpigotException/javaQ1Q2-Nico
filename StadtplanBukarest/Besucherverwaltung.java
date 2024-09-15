@@ -10,7 +10,7 @@ import linear.ListWithViewer;
 
 public class Besucherverwaltung {
 	private GraphWithViewer lageplan;
-	
+
 	public Besucherverwaltung() {
 		initGraph();
 	}
@@ -59,9 +59,9 @@ public class Besucherverwaltung {
 		lageplan.addEdge(e09);
 		lageplan.addEdge(e10);
 		//lageplan.addEdge(e11);
-		
+
 		lageplan.switchToISOMLayout();
-		
+
 	}
 	public List<Vertex> gibNaheBarriereferie(String pStart){
 		ListWithViewer<Vertex> ergbnis = new ListWithViewer<>();
@@ -97,7 +97,39 @@ public class Besucherverwaltung {
 		//weiter
 		return erg;
 	}
+	public double gibFahrzeit(){
 
+		List<Attraktion> pStrecke = new ListWithViewer<>();
+		pStrecke.append((Attraktion) lageplan.getVertex("G"));
+		pStrecke.append((Attraktion) lageplan.getVertex("P"));
+		pStrecke.append((Attraktion) lageplan.getVertex("E"));
+		pStrecke.append((Attraktion) lageplan.getVertex("n"));
+		pStrecke.append((Attraktion) lageplan.getVertex("M"));
+
+		double result = 0;
+		pStrecke.toFirst();
+		Vertex current = pStrecke.getContent();
+		pStrecke.next();
+
+
+		while (pStrecke.hasAccess()){
+			Vertex v1 = pStrecke.getContent();
+			result  += lageplan.getEdge(current,v1).getWeight();
+			current = v1;
+			pStrecke.next();
+		}
+	return result;
+	}
+
+
+public List<Vertex> gibAlleKonoten(){
+	List<Vertex> g = lageplan.getVertices();
+	for (g.toFirst();g.hasAccess(); g.next()){
+		System.out.println(g.getContent());
+	}
+
+return g;
+}
 
 	public static void main(String[] args) {
 		Besucherverwaltung b1 = new Besucherverwaltung();
